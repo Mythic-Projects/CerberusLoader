@@ -4,10 +4,38 @@ plugins {
 
 apply plugin: 'java-library'
 
-group = 'dev.mythicprojects'
+group = 'org.mythicprojects'
 version = '1.0.0'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://storehouse.okaeri.eu/repository/maven-public" }
+}
+
+dependencies {
+    implementation "org.yaml:snakeyaml:1.33";
+    implementation "eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5";
+    compileOnly "org.jetbrains:annotations:23.0.0";
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'org.mythicprojects.cerberusloader.Main'
+    }
+
+    def libsPackage = "org.mythicprojects.cerberusloader.libs";
+    relocate "org.yaml.snakeyaml", "${libsPackage}.libs.org.yaml.snakeyaml";
+    relocate "eu.okaeri.configs", "${libsPackage}.libs.okaeri.configs";
+
+    minimize()
+}
+
+jar {
+    dependsOn shadowJar
+}
