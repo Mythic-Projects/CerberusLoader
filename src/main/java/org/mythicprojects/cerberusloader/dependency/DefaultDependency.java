@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum DefaultDependency {
 
-    NETTY("io.netty", "netty-all", "4.0.23.Final", "4.1.93.Final"),
+    NETTY("io.netty", "netty-all", "4.0.23.Final", "4.1.91.Final"),
     GUAVA("com.google.guava", "guava", "17.0", "21.0"),
     GSON("com.google.code.gson", "gson", "2.2.4", "2.8.9"),
     SNAKEYAML("org.yaml", "snakeyaml", "1.15", "1.30"),
@@ -12,14 +12,14 @@ public enum DefaultDependency {
 
     private final String groupId;
     private final String artifactId;
-    private final String modernVersion;
     private final String legacyVersion;
+    private final String modernVersion;
 
-    DefaultDependency(@NotNull String groupId, @NotNull String artifactId, @NotNull String modernVersion, @NotNull String legacyVersion) {
+    DefaultDependency(@NotNull String groupId, @NotNull String artifactId, @NotNull String legacyVersion, @NotNull String modernVersion) {
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.modernVersion = modernVersion;
         this.legacyVersion = legacyVersion;
+        this.modernVersion = modernVersion;
     }
 
     public @NotNull String getGroupId() {
@@ -30,12 +30,12 @@ public enum DefaultDependency {
         return this.artifactId;
     }
 
-    public @NotNull String getModernVersion() {
-        return this.modernVersion;
-    }
-
     public @NotNull String getLegacyVersion() {
         return this.legacyVersion;
+    }
+
+    public @NotNull String getModernVersion() {
+        return this.modernVersion;
     }
 
 }

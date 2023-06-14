@@ -1,8 +1,7 @@
 package org.mythicprojects.cerberusloader.dependency;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Locale;
+import org.jetbrains.annotations.NotNull;
 
 public class MavenCentralDependency extends Dependency {
 
@@ -16,11 +15,11 @@ public class MavenCentralDependency extends Dependency {
 
         String version = configurationVersion;
         switch (configurationVersion.toLowerCase(Locale.ROOT)) {
-            case "modern":
-                version = dependency.getModernVersion();
-                break;
             case "legacy":
                 version = dependency.getLegacyVersion();
+                break;
+            case "modern":
+                version = dependency.getModernVersion();
                 break;
         }
 

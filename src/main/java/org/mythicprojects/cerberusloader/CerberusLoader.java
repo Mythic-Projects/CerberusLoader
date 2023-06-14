@@ -3,6 +3,7 @@ package org.mythicprojects.cerberusloader;
 import org.jetbrains.annotations.NotNull;
 import org.mythicprojects.cerberusloader.config.LoaderConfiguration;
 import org.mythicprojects.cerberusloader.dependency.DefaultDependency;
+import org.mythicprojects.cerberusloader.dependency.Dependency;
 import org.mythicprojects.cerberusloader.dependency.DependencyDownloader;
 import org.mythicprojects.cerberusloader.dependency.MavenCentralDependency;
 import org.mythicprojects.cerberusloader.logging.CerberusLogger;
@@ -56,7 +57,7 @@ public final class CerberusLoader {
     }
 
     private Collection<File> downloadDefaultDependencies(@NotNull LoaderConfiguration.Dependencies dependenciesConfiguration) {
-        List<MavenCentralDependency> dependencies = Arrays.asList(
+        List<Dependency> dependencies = Arrays.asList(
                 MavenCentralDependency.of(DefaultDependency.NETTY, dependenciesConfiguration.netty),
                 MavenCentralDependency.of(DefaultDependency.GUAVA, dependenciesConfiguration.guava),
                 MavenCentralDependency.of(DefaultDependency.GSON, dependenciesConfiguration.gson),
