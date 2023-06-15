@@ -20,9 +20,10 @@ public class MavenCentralLibrary extends Library {
         int currentJavaVersion = JavaHelper.getVersion();
         if (javaForcingModern >= 0 && currentJavaVersion >= javaForcingModern && version.equalsIgnoreCase("legacy")) {
             CerberusLoader.getLogger().warn("Forcing modern version of %s due to using Java %d", dependency.name(), currentJavaVersion);
+            version = "modern";
         }
 
-        switch (configurationVersion.toLowerCase(Locale.ROOT)) {
+        switch (version.toLowerCase(Locale.ROOT)) {
             case "legacy":
                 version = dependency.getLegacyVersion();
                 break;
