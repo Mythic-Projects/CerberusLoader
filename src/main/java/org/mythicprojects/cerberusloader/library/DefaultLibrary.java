@@ -1,8 +1,8 @@
-package org.mythicprojects.cerberusloader.dependency;
+package org.mythicprojects.cerberusloader.library;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum DefaultDependency {
+public enum DefaultLibrary {
 
     NETTY("io.netty", "netty-all", "4.0.23.Final", "4.1.91.Final"),
     GUAVA("com.google.guava", "guava", "17.0", "21.0"),
@@ -15,7 +15,7 @@ public enum DefaultDependency {
     private final String legacyVersion;
     private final String modernVersion;
 
-    DefaultDependency(@NotNull String groupId, @NotNull String artifactId, @NotNull String legacyVersion, @NotNull String modernVersion) {
+    DefaultLibrary(@NotNull String groupId, @NotNull String artifactId, @NotNull String legacyVersion, @NotNull String modernVersion) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.legacyVersion = legacyVersion;

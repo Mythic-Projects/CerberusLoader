@@ -2,10 +2,10 @@ package org.mythicprojects.cerberusloader;
 
 import org.jetbrains.annotations.NotNull;
 import org.mythicprojects.cerberusloader.config.LoaderConfiguration;
-import org.mythicprojects.cerberusloader.dependency.DefaultDependency;
-import org.mythicprojects.cerberusloader.dependency.Dependency;
-import org.mythicprojects.cerberusloader.dependency.DependencyDownloader;
-import org.mythicprojects.cerberusloader.dependency.MavenCentralDependency;
+import org.mythicprojects.cerberusloader.library.DefaultLibrary;
+import org.mythicprojects.cerberusloader.library.Library;
+import org.mythicprojects.cerberusloader.library.LibraryDownloader;
+import org.mythicprojects.cerberusloader.library.MavenCentralLibrary;
 import org.mythicprojects.cerberusloader.logging.CerberusLogger;
 import org.mythicprojects.cerberusloader.logging.CerberusLoggerFormatter;
 
@@ -25,7 +25,7 @@ public final class CerberusLoader {
     private static final Logger DEFAULT_LOGGER = Logger.getLogger("CerberusLoader");
     private final CerberusLogger logger = new CerberusLogger(DEFAULT_LOGGER);
 
-    private final DependencyDownloader dependencyDownloader = new DependencyDownloader();
+    private final LibraryDownloader libraryDownloader = new LibraryDownloader();
 
     static {
         ConsoleHandler handler = new ConsoleHandler();
@@ -36,9 +36,10 @@ public final class CerberusLoader {
 
     public void start(String[] args) {
         LoaderConfiguration configuration = LoaderConfiguration.createConfiguration(FileConsts.CONFIGURATION_FILE);
-        LoaderConfiguration.Dependencies dependenciesConfiguration = configuration.dependencies;
+        LoaderConfiguration.Libraries librariesConfiguration = configuration.libraries;
 
-        Collection<File> files = this.downloadDefaultDependencies(dependenciesConfiguration);
+        Collection<File> files = this.downloadDefaultDependencies(librariesConfiguration);
+        files.add(new File("unicornspigot.jar"));
         URL[] urls = files.stream().map(file -> {
             try {
                 return file.toURI().toURL();
@@ -56,20 +57,20 @@ public final class CerberusLoader {
         }
     }
 
-    private Collection<File> downloadDefaultDependencies(@NotNull LoaderConfiguration.Dependencies dependenciesConfiguration) {
-        List<Dependency> dependencies = Arrays.asList(
-                MavenCentralDependency.of(DefaultDependency.NETTY, dependenciesConfiguration.netty),
-                MavenCentralDependency.of(DefaultDependency.GUAVA, dependenciesConfiguration.guava),
-                MavenCentralDependency.of(DefaultDependency.GSON, dependenciesConfiguration.gson),
-                MavenCentralDependency.of(DefaultDependency.SNAKEYAML, dependenciesConfiguration.snakeYaml),
-                MavenCentralDependency.of(DefaultDependency.MYSQL_DRIVER, dependenciesConfiguration.mysqlDriver)
+    private Collection<File> downloadDefaultDependencies(@NotNull LoaderConfiguration.Libraries librariesConfiguration) {
+        List<Library> dependencies = Arrays.asList(
+                MavenCentralLibrary.of(DefaultLibrary.NETTY, librariesConfiguration.netty),
+                MavenCentralLibrary.of(DefaultLibrary.GUAVA, librariesConfiguration.guava),
+                MavenCentralLibrary.of(DefaultLibrary.GSON, librariesConfiguration.gson),
+                MavenCentralLibrary.of(DefaultLibrary.SNAKEYAML, librariesConfiguration.snakeYaml),
+                MavenCentralLibrary.of(DefaultLibrary.MYSQL_DRIVER, librariesConfiguration.mysqlDriver)
         );
 
         this.logger.info("Downloading dependencies...");
         return dependencies.stream()
-                .map(dependency -> {
+                .flatMap(library -> {
                     try {
-                        return this.dependencyDownloader.findOrDownloadDependency(dependency);
+                        return this.libraryDownloader.findOrDownloadDependencyDeep(library).stream();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }

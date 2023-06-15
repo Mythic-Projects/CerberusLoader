@@ -21,7 +21,9 @@ repositories {
 dependencies {
     implementation "org.yaml:snakeyaml:1.33";
     implementation "eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5";
-    compileOnly "org.jetbrains:annotations:23.0.0";
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2";
+    implementation "com.fasterxml.woodstox:woodstox-core:6.4.0";
+    compileOnly "org.jetbrains:annotations:24.0.1";
 }
 
 shadowJar {
@@ -29,11 +31,17 @@ shadowJar {
         attributes 'Main-Class': 'org.mythicprojects.cerberusloader.Main'
     }
 
-    def libsPackage = "org.mythicprojects.cerberusloader.libs";
-    relocate "org.yaml.snakeyaml", "${libsPackage}.libs.org.yaml.snakeyaml";
-    relocate "eu.okaeri.configs", "${libsPackage}.libs.okaeri.configs";
+    archiveFileName = "${rootProject.name} v${archiveVersion.get()}.${archiveExtension.get()}"
 
-    minimize()
+    def libsPackage = "org.mythicprojects.cerberusloader.libs";
+    relocate "org.yaml.snakeyaml", "${libsPackage}.snakeyaml";
+    relocate "eu.okaeri.configs", "${libsPackage}.okaeri.configs";
+    relocate "com.fasterxml", "${libsPackage}.fastxml";
+    relocate "org.codehaus", "${libsPackage}.codehaus";
+
+    minimize() {
+        exclude(dependency("com.fasterxml.woodstox:woodstox-core:.*"))
+    }
 }
 
 jar {

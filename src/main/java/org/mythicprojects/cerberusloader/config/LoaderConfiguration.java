@@ -11,9 +11,9 @@ public class LoaderConfiguration extends OkaeriConfig {
 
     public String licenseKeyFilePath = "cerberus/license.key";
 
-    public Dependencies dependencies = new Dependencies();
+    public Libraries libraries = new Libraries();
 
-    public static class Dependencies extends OkaeriConfig {
+    public static class Libraries extends OkaeriConfig {
 
         public String netty = "LEGACY";
 

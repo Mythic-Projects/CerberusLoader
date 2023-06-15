@@ -1,15 +1,15 @@
-package org.mythicprojects.cerberusloader.dependency;
+package org.mythicprojects.cerberusloader.library;
 
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
 
-public class MavenCentralDependency extends Dependency {
+public class MavenCentralLibrary extends Library {
 
-    public MavenCentralDependency(@NotNull String groupId, @NotNull String artifactId, @NotNull String version) {
+    public MavenCentralLibrary(@NotNull String groupId, @NotNull String artifactId, @NotNull String version) {
         super("https://repo.maven.apache.org/maven2", groupId, artifactId, version);
     }
 
-    public static @NotNull MavenCentralDependency of(@NotNull DefaultDependency dependency, @NotNull String configurationVersion) {
+    public static @NotNull MavenCentralLibrary of(@NotNull DefaultLibrary dependency, @NotNull String configurationVersion) {
         String groupId = dependency.getGroupId();
         String artifactId = dependency.getArtifactId();
 
@@ -23,7 +23,7 @@ public class MavenCentralDependency extends Dependency {
                 break;
         }
 
-        return new MavenCentralDependency(groupId, artifactId, version);
+        return new MavenCentralLibrary(groupId, artifactId, version);
     }
 
 }

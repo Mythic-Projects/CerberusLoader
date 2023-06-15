@@ -1,10 +1,11 @@
-package org.mythicprojects.cerberusloader.dependency;
+package org.mythicprojects.cerberusloader.library;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public class Dependency {
+public class Library {
 
     private final String repository;
 
@@ -12,15 +13,11 @@ public class Dependency {
     private final String artifactId;
     private final String version;
 
-    private final String jarPath;
-
-    public Dependency(@NotNull String repository, @NotNull String groupId, @NotNull String artifactId, @NotNull String version) {
+    public Library(@NotNull String repository, @NotNull String groupId, @NotNull String artifactId, @NotNull String version) {
         this.repository = repository;
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-
-        this.jarPath = prepareJarPath(groupId, artifactId, version);
     }
 
     public @NotNull String getRepository() {
@@ -39,19 +36,19 @@ public class Dependency {
         return this.version;
     }
 
-    public String getJarPath() {
-        return this.jarPath;
+    public @NotNull String prepareFilePath(@NotNull String extension) {
+        return String.format("%s/%s/%s/%s-%s.%s", this.groupId.replace(".", "/"), this.artifactId, this.version, this.artifactId, this.version, extension);
     }
 
-    public @NotNull String getJarUrl() {
-        return this.repository + "/" + this.jarPath;
+    public @NotNull URL prepareFileUrl(@NotNull String extension) throws MalformedURLException {
+        return new URL(String.format("%s/%s", this.repository, this.prepareFilePath(extension)));
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || this.getClass() != obj.getClass()) return false;
-        Dependency that = (Dependency) obj;
+        Library that = (Library) obj;
         return Objects.equals(this.groupId, that.groupId) && Objects.equals(this.artifactId, that.artifactId) && Objects.equals(this.version, that.version);
     }
 
@@ -63,10 +60,6 @@ public class Dependency {
     @Override
     public @NotNull String toString() {
         return this.groupId + ":" + this.artifactId + ":" + this.version;
-    }
-
-    private static String prepareJarPath(@NotNull String groupId, @NotNull String artifactId, @NotNull String version) {
-        return String.format("%s/%s/%s/%s-%s.jar", groupId.replace(".", "/"), artifactId, version, artifactId, version);
     }
 
 }
