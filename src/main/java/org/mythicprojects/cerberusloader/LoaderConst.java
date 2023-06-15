@@ -2,9 +2,9 @@ package org.mythicprojects.cerberusloader;
 
 import java.io.File;
 
-public final class FileConsts {
+public final class LoaderConst {
 
-    private FileConsts() {
+    private LoaderConst() {
     }
 
     public static final File LOADER_DIRECTORY = new File("cerberus");

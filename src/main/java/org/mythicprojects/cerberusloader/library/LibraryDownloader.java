@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
-import org.mythicprojects.cerberusloader.FileConsts;
+import org.mythicprojects.cerberusloader.LoaderConst;
 import org.mythicprojects.cerberusloader.library.maven.MavenDependency;
 import org.mythicprojects.cerberusloader.library.maven.MavenProject;
 
@@ -61,7 +61,7 @@ public class LibraryDownloader {
 
     public @NotNull File findOrDownloadDependency(@NotNull Library library) throws IOException {
         String jarPath = library.prepareFilePath("jar");
-        Path dependencyPath = Paths.get(FileConsts.DEPENDENCIES_DIRECTORY.getAbsolutePath(), jarPath);
+        Path dependencyPath = Paths.get(LoaderConst.DEPENDENCIES_DIRECTORY.getAbsolutePath(), jarPath);
         File dependencyFile = dependencyPath.toFile();
         if (dependencyFile.exists()) {
             return dependencyFile;
