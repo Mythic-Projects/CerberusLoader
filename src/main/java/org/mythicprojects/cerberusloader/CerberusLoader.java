@@ -70,7 +70,7 @@ public final class CerberusLoader {
         return dependencies.stream()
                 .flatMap(library -> {
                     try {
-                        return this.libraryDownloader.findOrDownloadDependencyDeep(library).stream();
+                        return this.libraryDownloader.findOrDownloadDependency(library).stream();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
