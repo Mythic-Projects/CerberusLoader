@@ -62,7 +62,8 @@ public final class CerberusLoader {
                 MavenCentralLibrary.of(DefaultLibrary.GUAVA, librariesConfiguration.guava),
                 MavenCentralLibrary.of(DefaultLibrary.GSON, librariesConfiguration.gson),
                 MavenCentralLibrary.of(DefaultLibrary.SNAKEYAML, librariesConfiguration.snakeYaml),
-                MavenCentralLibrary.of(DefaultLibrary.MYSQL_DRIVER, librariesConfiguration.mysqlDriver)
+                MavenCentralLibrary.of(DefaultLibrary.MYSQL_DRIVER, librariesConfiguration.mysqlDriver),
+                new MavenCentralLibrary("org.fusesource.jansi", "jansi", "2.4.0") // Needed to use it in UnicornSpigot...
         );
 
         LOGGER.info("Downloading dependencies...");
