@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.mythicprojects.cerberusloader.LoaderConst;
 import org.mythicprojects.cerberusloader.library.maven.MavenDependency;
@@ -36,30 +35,30 @@ public class LibraryDownloader {
         File pomFile = this.findOrDownloadDependencyFile(toLoad, "pom");
         ObjectMapper xmlMapper = new XmlMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         MavenProject mavenProject = xmlMapper.readValue(pomFile, MavenProject.class);
-        Set<File> subDependencies = mavenProject.getDependencies().stream()
+        mavenProject.getDependencies().stream()
                 .filter(dependency -> !dependency.isOptional())
                 .filter(dependency -> dependency.getScope() != null && dependency.getScope().equals("compile"))
-                .flatMap(dependency -> {
+                .forEachOrdered(dependency -> {
                     MavenDependency projectParent = mavenProject.getParent();
-                    String projectGroupId = mavenProject.getGroupId() != null
-                            ? mavenProject.getGroupId()
-                            : projectParent.getGroupId();
-                    String projectVersion = mavenProject.getVersion() != null
-                            ? mavenProject.getVersion() :
-                            projectParent.getVersion();
+                    String projectGroupId = mavenProject.getGroupId();
+                    if (projectGroupId == null) {
+                        projectGroupId = projectParent.getGroupId();
+                    }
+                    String projectVersion = mavenProject.getVersion();
+                    if (projectVersion == null) {
+                        projectVersion = projectParent.getVersion();
+                    }
 
                     String groupId = dependency.getGroupId().replace("${project.groupId}", Objects.toString(projectGroupId));
                     String version = dependency.getVersion().replace("${project.version}", Objects.toString(projectVersion));
 
                     MavenCentralLibrary library = new MavenCentralLibrary(groupId, dependency.getArtifactId(), version);
                     try {
-                        return this.findOrDownloadDependency(library).stream();
+                        dependencies.addAll(this.findOrDownloadDependency(library));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                })
-                .collect(Collectors.toSet());
-        dependencies.addAll(subDependencies);
+                });
 
         return dependencies;
     }
