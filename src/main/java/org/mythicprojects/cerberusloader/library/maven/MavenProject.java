@@ -49,17 +49,23 @@ public class MavenProject extends MavenDependency {
             return Objects.requireNonNull(super.getArtifactId());
         }
 
-        @Override
-        public @NotNull String getVersion() {
-            return Objects.requireNonNull(super.getVersion());
-        }
-
         public @Nullable String getScope() {
             return this.scope;
         }
 
         public boolean isOptional() {
             return this.optional;
+        }
+
+        @Override
+        public String toString() {
+            return "ProjectDependency{" +
+                    "groupId='" + this.getGroupId() + '\'' +
+                    ", artifactId='" + this.getArtifactId() + '\'' +
+                    ", version='" + this.getVersion() + '\'' +
+                    ", scope='" + this.scope + '\'' +
+                    ", optional=" + this.optional +
+                    '}';
         }
 
     }
